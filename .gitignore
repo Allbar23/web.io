@@ -1,0 +1,38 @@
+# Node.js dependencies
+node_modules/
+
+# Log files
+*.log
+
+# OS system files
+.DS_Store
+*~
+Thumbs.db
+desktop.ini
+
+# Python env folders
+venv/
+env/
+myenv/
+
+# Cache files
+.cache/
+*.pyc
+
+# Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Build/output folders
+build/
+dist/
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+
+# Temporary files
+.*.swp

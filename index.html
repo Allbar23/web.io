@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>Rumah Jeritan - Dunia Horor</title>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Special+Elite&display=swap" rel="stylesheet" />
+<style>
+  /* Reset dan base */
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+  body, html {
+    height: 100%;
+    font-family: 'Special Elite', monospace;
+    background-color: #1a1a1a;
+    color: #f4dfdf;
+    overflow-x: hidden;
+  }
+  h1.title {
+    font-family: 'Nosifer', cursive;
+    font-size: 7rem;
+    color: #dc143c;
+    text-align: center;
+    margin: 1rem 0 0.2rem 0;
+    user-select: none;
+    text-shadow:
+      0 0 10px #ff0000,
+      0 0 20px #8b0000,
+      0 0 30px #6e0000;
+    animation: pulseRed 2.5s linear infinite;
+    position: relative;
+  }
+  @keyframes pulseRed {
+    0%, 100% { text-shadow:
+      0 0 10px #dc143c,
+      0 0 20px #8b0000,
+      0 0 40px #e00000;
+    }
+    50% { text-shadow:
+      0 0 20px #ff1919,
+      0 0 40px #ff2525,
+      0 0 60px #ff3232;
+    }
+  }
+  p.subtitle {
+    font-family: 'Special Elite', monospace;
+    font-size: 1.7rem;
+    color: #bb2b2b;
+    text-align: center;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 6px #6b0000;
+    user-select: none;
+  }
+  p.domain-link {
+    font-family: 'Special Elite', monospace;
+    font-size: 1.2rem;
+    color: #ff4444;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  p.domain-link a {
+    color: #ff6666;
+    text-decoration: underline;
+  }
+  .game-list {
+    max-width: 900px;
+    margin: 0 auto 3rem auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .game-list a {
+    display: block;
+    background: #2b0a0a;
+    border: 3px solid #660000;
+    border-radius: 12px;
+    padding: 1.6rem;
+    color: #ff6666;
+    font-family: 'Special Elite', monospace;
+    font-weight: bold;
+    font-size: 1.4rem;
+    box-shadow: inset 0 0 22px #8b0000;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .game-list a:hover,
+  .game-list a:focus {
+    background: #660000;
+    color: #fff;
+    box-shadow: inset 0 0 36px #ff2a2a;
+    outline: none;
+  }
+  /* Kotak komentar */
+  #commentBox {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    width: 320px;
+    max-width: 90vw;
+    background: rgba(59, 15, 15, 0.9);
+    border: 2px solid #660000;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 0 25px #8b0000;
+    font-family: 'Special Elite', monospace;
+    color: #f4dfdf;
+    user-select: none;
+    z-index: 1000;
+  }
+  #commentBox textarea {
+    width: 100%;
+    height: 90px;
+    background: #3b0f0f;
+    border: 1px solid #660000;
+    border-radius: 8px;
+    color: #f4dfdf;
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 0.5rem;
+    resize: vertical;
+    box-shadow: inset 0 0 18px #660000;
+  }
+  #commentBox button {
+    margin-top: 0.6rem;
+    width: 100%;
+    background: #a80000;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 1.15rem;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 0 20px #dc143c;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+  }
+  #commentBox button:hover,
+  #commentBox button:focus {
+    background: #ff1919;
+    box-shadow: 0 0 30px #ff5555;
+    outline: none;
+  }
+  #commentList {
+    max-height: 160px;
+    overflow-y: auto;
+    margin-top: 1rem;
+    border-top: 1px solid #660000;
+    padding-top: 0.5rem;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  #commentList p {
+    margin: 0 0 0.6rem 0;
+    border-bottom: 1px solid #660000;
+    padding-bottom: 0.4rem;
+    user-select: text;
+  }
+  /* Tombol Mute / Unmute */
+  #soundToggle {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    filter: drop-shadow(0 0 6px #ff2a2a);
+    transition: filter 0.3s ease;
+    z-index: 1100;
+  }
+  #soundToggle:hover {
+    filter: drop-shadow(0 0 15px #ff5252);
+    outline: none;
+  }
+  #soundToggle svg {
+    fill: #dc143c;
+    width: 100%;
+    height: 100%;
+  }
+  /* Responsive */
+  @media (max-width: 400px) {
+    h1.title {
+      font-size: 4.5rem;
+    }
+    .game-list a {
+      font-size: 1.2rem;
+      padding: 1.2rem;
+    }
+    #commentBox {
+      width: 90vw;
+      left: 5%;
+      bottom: 5%;
+    }
+    #commentBox textarea {
+      height: 70px;
+      font-size: 0.9rem;
+    }
+    #commentBox button {
+      font-size: 1rem;
+      padding: 0.7rem;
+    }
+  }
+</style>
+</head>
+<body>
+<h1 class="title">Rumah Jeritan</h1>
+<p class="subtitle">Tempat petualangan horor yang akan menguji ketegangan dan keberanianmu di dunia gelap penuh misteri.</p>
+
+<p class="domain-link">
+  Akses website kami di: <a href="https://house-screams.lovestoblog.com" target="_blank" rel="noopener">house-screams.lovestoblog.com</a>
+</p>
+
+<div class="game-list" aria-label="Daftar Game Horor">
+  <a href="games/games1.html" target="_blank" rel="noopener">Game 1: Rumah Tua</a>
+  <a href="games/game2.html" target="_blank" rel="noopener">Game 2: Kamar Gelap</a>
+  <a href="games/game3.html" target="_blank" rel="noopener">Game 3: Hantu di Lorong</a>
+  <a href="games/game4.html" target="_blank" rel="noopener">Game 4: Malam Berdarah</a>
+  <a href="games/game5.html" target="_blank" rel="noopener">Game 5: Jeritan Danau</a>
+  <a href="games/game6.html" target="_blank" rel="noopener">Game 6: Kuburan Sunyi</a>
+  <a href="games/game7.html" target="_blank" rel="noopener">Game 7: Kutukan Desa</a>
+  <a href="games/game8.html" target="_blank" rel="noopener">Game 8: Labirin Kelam</a>
+  <a href="games/game9.html" target="_blank" rel="noopener">Game 9: Misteri Kabut</a>
+  <a href="games/game10.html" target="_blank" rel="noopener">Game 10: Kesunyian Pintu</a>
+  <a href="games/game11.html" target="_blank" rel="noopener">Game 11</a>
+  <a href="games/game12.html" target="_blank" rel="noopener">Game 12</a>
+  <a href="games/game13.html" target="_blank" rel="noopener">Game 13</a>
+  <a href="games/game14.html" target="_blank" rel="noopener">Game 14</a>
+  <a href="games/game15.html" target="_blank" rel="noopener">Game 15</a>
+</div>
+
+<!-- Kotak Komentar -->
+<div id="commentBox" role="region" aria-label="Kotak Komentar Pengunjung">
+  <textarea id="commentInput" placeholder="Tulis komentar Anda di sini..." aria-label="Input komentar pengunjung"></textarea>
+  <button id="commentSubmitBtn" aria-label="Kirim komentar">Kirim Komentar</button>
+  <div id="commentList" aria-live="polite" aria-atomic="true" aria-relevant="additions"></div>
+</div>
+
+<!-- Tombol Mute / Unmute Suara -->
+<button id="soundToggle" aria-label="Tombol untuk mengaktifkan atau mematikan suara" title="Suara On/Off">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path id="soundIcon" d="M3 9v6h4l5 5V4L7 9H3zM16.5 12a4.5 4.5 0 0 0-4.11-4.47v8.95A4.5 4.5 0 0 0 16.5 12z"/>
+  </svg>
+</button>
+
+<audio id="ambientAudio" loop preload="auto" src="https://cdn.pixabay.com/download/audio/2021/12/02/audio_54a4346e63.mp3?filename=dark-ambient-11080.mp3"></audio>
+<audio id="doorCreakAudio" preload="auto" src="https://cdn.pixabay.com/download/audio/2021/10/26/audio_1b224a0fd3.mp3?filename=door-creak-6030.mp3"></audio>
+<audio id="heartbeatAudio" preload="auto" src="https://cdn.pixabay.com/download/audio/2021/08/23/audio_6672a82d5a.mp3?filename=heartbeat-5706.mp3"></audio>
+<audio id="ghostWhisperAudio" preload="auto" src="https://cdn.pixabay.com/download/audio/2022/03/08/audio_94eac84899.mp3?filename=ghost-whisper-7638.mp3"></audio>
+
+<script>
+  const commentInput = document.getElementById('commentInput');
+  const commentSubmitBtn = document.getElementById('commentSubmitBtn');
+  const commentList = document.getElementById('commentList');
+
+  function loadComments() {
+    const comments = JSON.parse(localStorage.getItem('rumahJeritanComments') || '[]');
+    commentList.innerHTML = '';
+    comments.forEach(c => {
+      const p = document.createElement('p');
+      p.textContent = c;
+      commentList.appendChild(p);
+    });
+  }
+
+  commentSubmitBtn.addEventListener('click', () => {
+    const text = commentInput.value.trim();
+    if(!text) {
+      alert('Komentar tidak boleh kosong!');
+      return;
+    }
+    const comments = JSON.parse(localStorage.getItem('rumahJeritanComments') || '[]');
+    comments.push(text);
+    localStorage.setItem('rumahJeritanComments', JSON.stringify(comments));
+    commentInput.value = '';
+    loadComments();
+    commentInput.focus();
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    loadComments();
+    if(soundEnabled) ambientAudio.play().catch(() => {});
+    scheduleRandomSounds();
+  });
+
+  const soundToggle = document.getElementById('soundToggle');
+  const ambientAudio = document.getElementById('ambientAudio');
+  const doorCreakAudio = document.getElementById('doorCreakAudio');
+  const heartbeatAudio = document.getElementById('heartbeatAudio');
+  const ghostWhisperAudio = document.getElementById('ghostWhisperAudio');
+
+  let soundEnabled = true;
+
+  soundToggle.addEventListener('click', () => {
+    soundEnabled = !soundEnabled;
+    if(soundEnabled){
+      ambientAudio.play().catch(() => {});
+      soundToggle.style.filter = 'drop-shadow(0 0 6px #ff0000)';
+      scheduleRandomSounds();
+    } else {
+      ambientAudio.pause();
+      doorCreakAudio.pause();
+      heartbeatAudio.pause();
+      ghostWhisperAudio.pause();
+      soundToggle.style.filter = 'drop-shadow(0 0 3px #660000)';
+    }
+  });
+
+  soundToggle.style.filter = 'drop-shadow(0 0 6px #ff0000)';
+
+  function scheduleRandomSounds(){
+    if(!soundEnabled) return;
+    const sounds = [doorCreakAudio, heartbeatAudio, ghostWhisperAudio];
+    const sound = sounds[Math.floor(Math.random()*sounds.length)];
+    sound.play().catch(() => {});
+    const delay = Math.floor(Math.random()*40000) + 20000;
+    setTimeout(scheduleRandomSounds, delay);
+  }
+</script>
+</body>
+</html>

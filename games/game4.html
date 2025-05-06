@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>Rumah Jeritan - Game 4: Malam Berdarah di Hutan Terlarang</title>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Special+Elite&display=swap" rel="stylesheet" />
+<style>
+  * {margin:0; padding:0; box-sizing: border-box;}
+  body {
+    font-family: 'Special Elite', monospace, monospace;
+    background-color: #1a1a1a;
+    color: #e8e1dc;
+    min-height: 100vh;
+    padding: 1rem;
+    user-select: none;
+    background-image:
+      url('https://images.pexels.com/photos/235621/pexels-photo-235621.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+    background-blend-mode: multiply;
+    background-color: #1a0000;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    filter: contrast(120%) brightness(90%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  header {
+    font-family: 'Creepster', cursive;
+    font-size: 3rem;
+    letter-spacing: 0.15em;
+    color: #dc143c;
+    text-shadow: 0 0 20px #dc143c, 0 0 30px #8b0000;
+    margin-bottom: 1rem;
+    text-align: center;
+    user-select: none;
+  }
+  main {
+    background-color: #2b0a0a;
+    border: 3px solid #660000;
+    border-radius: 12px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 0 30px #8b0000, inset 0 0 30px #330000;
+    color: #f4dfdf;
+    line-height: 1.5;
+    font-size: 1.15rem;
+    position: relative;
+  }
+  #gameText {
+    min-height: 280px;
+    white-space: pre-wrap;
+    overflow-y: auto;
+    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 1rem;
+  }
+  #inputArea {
+    display: flex;
+    gap: 0.75rem;
+  }
+  #choiceInput {
+    flex-grow: 1;
+    font-family: monospace;
+    font-size: 1.1rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: none;
+  }
+  #submitBtn {
+    background-color: #a80000;
+    border: none;
+    color: #f8dfdf;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #dc143c;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+  }
+  #submitBtn:hover, #submitBtn:focus {
+    background-color: #ff1919;
+    box-shadow: 0 0 14px #ff0000, 0 0 30px #ff5555;
+    outline: none;
+  }
+  #backLink {
+    margin-top: 1rem;
+    color: #dc143c;
+    font-family: monospace;
+    text-decoration: underline;
+    cursor: pointer;
+    user-select: none;
+  }
+</style>
+</head>
+<body>
+<header>Rumah Jeritan - Game 4: Malam Berdarah di Hutan Terlarang</header>
+<main>
+  <div id="gameText"></div>
+  <div id="inputArea">
+    <input type="text" id="choiceInput" placeholder="Masukkan pilihan (1-5)" maxlength="1" autofocus />
+    <button id="submitBtn" aria-label="Kirim Pilihan">Pilih</button>
+  </div>
+  <div id="backLink" tabindex="0" role="link" aria-label="Kembali ke halaman utama">← Kembali ke Halaman Utama</div>
+</main>
+
+<script>
+  const gameData = {
+    intro: `Malam ini kamu memasuki Hutan Terlarang yang penuh misteri berdarah.\n
+Ada lima jalur di depanmu:\n
+1. Jejak kaki berdarah.\n
+2. Suara jeritan terdengar dari arah utara.\n
+3. Pohon-pohon yang patah dengan bekas cakaran.\n
+4. Kabut tebal menutupi jalur barat.\n
+5. Cahaya misterius berkelip di kejauhan.\n
+Masukkan pilihan 1 sampai 5 untuk menentukan jalur.`,
+    story: [
+      `Kamu memilih jejak kaki berdarah.\n
+Jalur gelap dan penuh darah segar.\n
+Pilihanmu:\n
+1. Ikuti jejak lebih jauh.\n
+2. Berbalik dan cari jalan lain.\n
+3. Panik dan teriak.\n
+4. Cari benda tajam untuk perlindungan.\n
+5. Tempat berteduh di balik pohon.\n
+Masukkan pilihan (1-5).`,
+
+      `Kamu mendengar jeritan dari arah utara.\n
+Suara mengerikan memanggilmu.\n
+Pilihan:\n
+1. Lari menjauhi suara.\n
+2. Coba selidiki sumbernya.\n
+3. Siapkan diri untuk bertarung.\n
+4. Bersembunyi dan diam.\n
+5. Teriak untuk memanggil bantuan.\n
+Masukkan pilihan (1-5).`,
+
+      `Kabut tebal menyelimuti jalur barat.\n
+Sesosok bayangan menghadang di depan.\n
+Pilihan:\n
+1. Dekati bayangan.\n
+2. Jalan memutar menghindari.\n
+3. Ambil napas dalam dan panik.\n
+4. Hadapi dengan keberanian.\n
+5. Berdoa dan menunggu bantuan.\n
+Masukkan pilihan (1-5).`
+    ],
+    endings: {
+      "0-1": [
+        "Jejak kaki membawamu ke jurang berdarah.\nKamu terjatuh dan hilang dalam kegelapan.\nGAME OVER.",
+        "Kilatan cahaya merah muncul tiba-tiba dan membeku.\nKamu menjadi mangsa setan hutan.\nGAME OVER.",
+        "Suara jeritan menyayat hati membuatmu pingsan dan tidak bangun lagi.\nGAME OVER."
+      ],
+      "0-2": [
+        "Kamu menemukan jalan lain yang aman dan keluar dari hutan.\nSelamat, kamu bertahan malam ini!",
+        "Langkahmu membawa ke gerbang tersembunyi.\nPetualangan belum selesai, bersiaplah.",
+        "Penemuan pintu rahasia membuka babak baru.\nTeruskan perjuanganmu."
+      ],
+      "0-3": [
+        "Teriakanmu disambut bayangan hitam yang menyeramkan.\nGAME OVER.",
+        "Kamu tersesat di lorong gelap dan terperangkap selamanya.",
+        "Kegelapan menjadi teman terakhirmu yang menjemput jiwa."
+      ],
+      "0-4": [
+        "Dengan benda tajam, kamu melawan makhluk malam.\nPerjuanganmu belum selesai.",
+        "Senjata itu patah dalam pertarungan sengit.\nGAME OVER.",
+        "Pertarungan terakhir menguras nyalimu,\nhanya meninggalkan kesunyian."
+      ],
+      "0-5": [
+        "Berlindung membuatmu menghindari bahaya malam.\nTapi ketakutan masih menyelimutimu.",
+        "Tenggelam dalam kesunyian pohon raksasa, menunggu pagi.",
+        "Bayangan menyerang tiba-tiba dari balik pepohonan.\nGAME OVER."
+      ],
+      "1-1": [
+        "Lari menyelamatkan nyawa dari serangan makhluk mengerikan.\nKamu berhasil keluar.",
+        "Jeritan makin keras dan menggema,\nkau terus berlari tanpa arah.",
+        "Tersesat dalam kegelapan malam tanpa akhir."
+      ],
+      "1-2": [
+        "Kamu menemukan sosok terluka, yang ternyata jelmaan roh jahat.\nGAME OVER.",
+        "Bayangan hilang saat kau mendekat,\nnamun rasa takut tetap tinggal.",
+        "Pertemuan itu mengubah takdirmu selamanya."
+      ],
+      "1-3": [
+        "Kamu dijejali aura menyeramkan saat bersiap bertarung.\nHanya keberanian yang bisa selamatkanmu.",
+        "Serangan menggema di hutan, pertarungan berlangsung sengit.",
+        "Kesakitan dan keletihan membuatmu terluka parah."
+      ],
+      "1-4": [
+        "Diam dan bersembunyi, kamu melewati malam penuh bahaya.",
+        "Ketenangan sementara sebelum ancaman datang kembali.",
+        "Bayangan merangkak lebih dekat sekaligus menghilang."
+      ],
+      "1-5": [
+        "Teriakan membangkitkan jiwa lain, suasana menjadi kacau.",
+        "Suara-suara bergema dan menyesakkan dada.",
+        "Tidak ada yang menjawab, hanya bau kematian."
+      ],
+      "2-1": [
+        "Bayangan menyambut dengan bisikan mematikan.\nPertarungan mengancam hidupmu.",
+        "Menghadapi ketakutan, kau melangkah lebih jauh.",
+        "Kamu disentuh bayangan dingin dan kehilangan harapan."
+      ],
+      "2-2": [
+        "Mengelak kabut, aku mencari jalan keluar,\ntapi gelap menyelimutiku.",
+        "Jalan memutar membawamu ke reruntuhan penuh rahasia.",
+        "Kesunyian membuatmu hampir lupa keberanian."
+      ],
+      "2-3": [
+        "Napasku tersengal, aku berhadapan langsung dengan kengerian.",
+        "Doa terucap sebelum pertarungan sengit.",
+        "Akhir yang memilukan menanti di ujung kabut."
+      ],
+      "2-4": [
+        "Menunggu bantuan, malam kian gelap dan penuh ancaman.",
+        "Suara senyap mencekam mengelilingi hati.",
+        "Bayangan jadi teman sepi dalam kesendirian."
+      ],
+      "2-5": [
+        "Helaan napas berat dan suara gaib menghiasi malam.",
+        "Seruan putus asa yang tak pernah terjawab.",
+        "Kegelapan menutup mata terakhirku."
+      ]
+    }
+  };
+
+  const gameText = document.getElementById("gameText");
+  const choiceInput = document.getElementById("choiceInput");
+  const submitBtn = document.getElementById("submitBtn");
+  const backLink = document.getElementById("backLink");
+
+  let stage = -1;
+  let choices = [];
+
+  function display(text) {
+    gameText.innerHTML = text.replace(/\n/g, "<br>");
+    choiceInput.value = "";
+    choiceInput.focus();
+  }
+
+  function getRandomEnding(key) {
+    const endings = gameData.endings[key];
+    if (!endings) return "Petualangan selesai. Terima kasih sudah bermain Rumah Jeritan.";
+    const index = Math.floor(Math.random() * endings.length);
+    return endings[index];
+  }
+
+  function showStage() {
+    if (stage === -1) {
+      display(gameData.intro);
+    } else if (stage < gameData.story.length) {
+      display(gameData.story[stage]);
+    } else {
+      const key = (stage - 1) + "-" + choices[stage];
+      const endingText = getRandomEnding(key);
+      display(endingText);
+      submitBtn.textContent = "Main Lagi";
+      choiceInput.disabled = true;
+    }
+  }
+
+  function resetGame() {
+    stage = -1;
+    choices = [];
+    submitBtn.textContent = "Pilih";
+    choiceInput.disabled = false;
+    display(gameData.intro);
+  }
+
+  submitBtn.addEventListener("click", () => {
+    if (submitBtn.textContent === "Main Lagi") {
+      resetGame();
+      return;
+    }
+    const input = choiceInput.value.trim();
+    if (!["1","2","3","4","5"].includes(input)) {
+      alert("Masukkan angka 1 sampai 5!");
+      choiceInput.focus();
+      return;
+    }
+    choices.push(input);
+    stage++;
+    showStage();
+  });
+
+  choiceInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      submitBtn.click();
+    }
+  });
+
+  backLink.addEventListener("click", () => {
+    window.history.back();
+  });
+
+  backLink.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      window.history.back();
+    }
+  });
+
+  window.addEventListener("load", () => {
+    resetGame();
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>Rumah Jeritan - Game 11: Teror Malam di Desa Sunyi</title>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Special+Elite&display=swap" rel="stylesheet" />
+<style>
+  * {margin:0; padding:0; box-sizing: border-box;}
+  body {
+    font-family: 'Special Elite', monospace, monospace;
+    background-color: #1a1a1a;
+    color: #e8e1dc;
+    min-height: 100vh;
+    padding: 1rem;
+    user-select: none;
+    background-image:
+      url('https://images.pexels.com/photos/895875/pexels-photo-895875.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+    background-blend-mode: multiply;
+    background-color: #1a0000;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    filter: contrast(120%) brightness(90%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  header {
+    font-family: 'Creepster', cursive;
+    font-size: 3rem;
+    letter-spacing: 0.15em;
+    color: #dc143c;
+    text-shadow: 0 0 20px #dc143c, 0 0 30px #8b0000;
+    margin-bottom: 1rem;
+    text-align: center;
+    user-select: none;
+  }
+  main {
+    background-color: #2b0a0a;
+    border: 3px solid #660000;
+    border-radius: 12px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 0 30px #8b0000, inset 0 0 30px #330000;
+    color: #f4dfdf;
+    line-height: 1.7;
+    font-size: 1.15rem;
+    position: relative;
+  }
+  #gameText {
+    min-height: 300px;
+    white-space: pre-wrap;
+    overflow-y: auto;
+    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 1rem;
+  }
+  #inputArea {
+    display: flex;
+    gap: 0.75rem;
+  }
+  #choiceInput {
+    flex-grow: 1;
+    font-family: monospace;
+    font-size: 1.1rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: none;
+  }
+  #submitBtn {
+    background-color: #a80000;
+    border: none;
+    color: #f8dfdf;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #dc143c;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+  }
+  #submitBtn:hover, #submitBtn:focus {
+    background-color: #ff1919;
+    box-shadow: 0 0 14px #ff0000, 0 0 30px #ff5555;
+    outline: none;
+  }
+  #backLink {
+    margin-top: 1rem;
+    color: #dc143c;
+    font-family: monospace;
+    text-decoration: underline;
+    cursor: pointer;
+    user-select: none;
+  }
+</style>
+</head>
+<body>
+<header>Rumah Jeritan - Game 11: Teror Malam di Desa Sunyi</header>
+<main>
+  <div id="gameText"></div>
+  <div id="inputArea">
+    <input type="text" id="choiceInput" placeholder="Masukkan pilihan (1-5)" maxlength="1" autofocus />
+    <button id="submitBtn" aria-label="Kirim Pilihan">Pilih</button>
+  </div>
+  <div id="backLink" tabindex="0" role="link" aria-label="Kembali ke halaman utama">← Kembali ke Halaman Utama</div>
+</main>
+
+<script>
+  const gameData = {
+    intro: `Kamu tiba di desa sunyi yang sejak lama ditinggalkan penduduk.
+Malam gelap dengan angin meniup suara misterius.
+Ada lima jalan yang bisa kamu pilih:
+1. Jalan utama menuju rumah kepala desa.
+2. Jalan setapak ke makam kuno.
+3. Lorong gelap di pasar tua.
+4. Jalan kecil ke menara jam rusak.
+5. Jalan berkelok di sekitar danau hitam.
+Pilih jalanmu (1-5) untuk memulai perjalanan.`,
+    story: [
+      `Kamu memilih jalan utama.
+Langkahmu terhenti oleh teriakan samar dari rumah kepala desa.
+Pilihanmu:
+1. Masuk ke dalam rumah dan cari sumber suara.
+2. Mengintip dari jendela dan bersembunyi.
+3. Berlari pergi meninggalkan desa.
+4. Memanggil bantuan dengan telepon yang jelek.
+5. Mendengarkan dan mencoba mengerti suara itu.
+Masukkan pilihan (1-5).`,
+
+      `Kamu mencoba masuk ke dalam rumah.
+Ruangan gelap dan penuh debu dengan aroma pembusukan.
+Pilihan:
+1. Nyalakan senter dan telusuri ruangan.
+2. Cari jalan keluar lain.
+3. Panggil roh desa lewat mantra.
+4. Periksa buku-buku tua di rak.
+5. Duduk dan tunggu sesuatu terjadi.
+Masukkan pilihan (1-5).`
+    ],
+    endings: {
+      "0-1": [
+        "Teriakan itu mengubahmu menjadi bagian dari kutukan desa.\nGAME OVER.",
+        "Bayangan gelap menelanmu tanpa sisa.\nGAME OVER.",
+        "Suara tangisan menghancurkan jiwamu perlahan."
+      ],
+      "0-2": [
+        "Berhasil mengamati dari jendela tanpa disadari.\nPetualangan berlanjut.",
+        "Kamu menemukan petunjuk penting lewat jendela.",
+        "Kamu merasa diawasi dan harus waspada."
+      ],
+      "0-3": [
+        "Lari tanpa arah dan tersesat di lorong kepulan kabut.\nGAME OVER.",
+        "Langkahmu terhenti dan ditelan malam.",
+        "Kamu menemukan akhir pahit dalam pelarianmu."
+      ],
+      "0-4": [
+        "Telepon rusak dan hanya suara bisikan yang terdengar.",
+        "Upayamu memanggil bantuan gagal dan membuatmu lemah.",
+        "Kegelapan datang perlahan menjerat."
+      ],
+      "0-5": [
+        "Suara itu adalah pesan terakhir dari jiwa tak tenang.",
+        "Kamu tersadar dari mimpi buruk dan berusaha bertahan.",
+        "Petualangan baru akan segera dimulai."
+      ],
+      "1-1": [
+        "Dengan senter, kau lihat sosok mengerikan yang membekukan darahmu.\nGAME OVER.",
+        "Bayangan muncul dari balik kegelapan dan menyerang.",
+        "Kamu pingsan oleh kengerian yang tak terjelaskan."
+      ],
+      "1-2": [
+        "Berhasil menemukan pintu rahasia di belakang rumah.",
+        "Kamu menghindari bahaya dengan keberanian luar biasa.",
+        "Misteri semakin dalam dan kau siap melanjutkan."
+      ],
+      "1-3": [
+        "Mantra memanggil roh penjaga desa.\nMereka menawarkan pilihan sulit.",
+        "Semangat petualang menyala tapi jiwa mulai lelah.",
+        "Ancaman dahsyat muncul dari kegelapan."
+      ],
+      "1-4": [
+        "Buku tua berisi kutukan yang kau baca dengan takut.",
+        "Roh jahat terbangun dan mengepungmu.\nGAME OVER.",
+        "Kau mendapat pengetahuan penting tapi dengan harga nyawa."
+      ],
+      "1-5": [
+        "Kau duduk menunggu keajaiban, tapi hanya kegelapan yang datang.",
+        "Saat menunggu, kesunyian membunuh ketenanganmu.",
+        "Tempat itu terasa hidup dan menghisap semangatmu."
+      ]
+    }
+  };
+
+  const gameText = document.getElementById("gameText");
+  const choiceInput = document.getElementById("choiceInput");
+  const submitBtn = document.getElementById("submitBtn");
+  const backLink = document.getElementById("backLink");
+
+  let stage = -1;
+  let choices = [];
+
+  function display(text) {
+    gameText.innerHTML = text.replace(/\n/g, "<br>");
+    choiceInput.value = "";
+    choiceInput.focus();
+  }
+
+  function getRandomEnding(key) {
+    const endings = gameData.endings[key];
+    if (!endings) return "Petualangan selesai. Terima kasih sudah bermain Rumah Jeritan.";
+    const index = Math.floor(Math.random() * endings.length);
+    return endings[index];
+  }
+
+  function showStage() {
+    if (stage === -1) {
+      display(gameData.intro);
+    } else if (stage < gameData.story.length) {
+      display(gameData.story[stage]);
+    } else {
+      const key = (stage - 1) + "-" + choices[stage];
+      const endingText = getRandomEnding(key);
+      display(endingText);
+      submitBtn.textContent = "Main Lagi";
+      choiceInput.disabled = true;
+    }
+  }
+
+  function resetGame() {
+    stage = -1;
+    choices = [];
+    submitBtn.textContent = "Pilih";
+    choiceInput.disabled = false;
+    display(gameData.intro);
+  }
+
+  submitBtn.addEventListener("click", () => {
+    if (submitBtn.textContent === "Main Lagi") {
+      resetGame();
+      return;
+    }
+    const input = choiceInput.value.trim();
+    if (!["1","2","3","4","5"].includes(input)) {
+      alert("Masukkan angka 1 sampai 5!");
+      choiceInput.focus();
+      return;
+    }
+    choices.push(input);
+    stage++;
+    showStage();
+  });
+
+  choiceInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      submitBtn.click();
+    }
+  });
+
+  backLink.addEventListener("click", () => {
+    window.history.back();
+  });
+
+  backLink.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      window.history.back();
+    }
+  });
+
+  window.addEventListener("load", () => {
+    resetGame();
+  });
+</script>
+</body>
+</html>

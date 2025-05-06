@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>Rumah Jeritan - Game 9: Misteri Kabut Mematikan</title>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Special+Elite&display=swap" rel="stylesheet" />
+<style>
+  * {margin:0; padding:0; box-sizing: border-box;}
+  body {
+    font-family: 'Special Elite', monospace, monospace;
+    background-color: #1a1a1a;
+    color: #e8e1dc;
+    min-height: 100vh;
+    padding: 1rem;
+    user-select: none;
+    background-image:
+      url('https://images.pexels.com/photos/4827/landscape-mountains-nature-morning.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+    background-blend-mode: multiply;
+    background-color: #1a0000;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    filter: contrast(120%) brightness(90%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  header {
+    font-family: 'Creepster', cursive;
+    font-size: 3rem;
+    letter-spacing: 0.15em;
+    color: #dc143c;
+    text-shadow: 0 0 20px #dc143c, 0 0 30px #8b0000;
+    margin-bottom: 1rem;
+    text-align: center;
+    user-select: none;
+  }
+  main {
+    background-color: #2b0a0a;
+    border: 3px solid #660000;
+    border-radius: 12px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 0 30px #8b0000, inset 0 0 30px #330000;
+    color: #f4dfdf;
+    line-height: 1.5;
+    font-size: 1.15rem;
+    position: relative;
+  }
+  #gameText {
+    min-height: 260px;
+    white-space: pre-wrap;
+    overflow-y: auto;
+    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 1rem;
+  }
+  #inputArea {
+    display: flex;
+    gap: 0.75rem;
+  }
+  #choiceInput {
+    flex-grow: 1;
+    font-family: monospace;
+    font-size: 1.1rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: none;
+  }
+  #submitBtn {
+    background-color: #a80000;
+    border: none;
+    color: #f8dfdf;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #dc143c;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+  }
+  #submitBtn:hover, #submitBtn:focus {
+    background-color: #ff1919;
+    box-shadow: 0 0 14px #ff0000, 0 0 30px #ff5555;
+    outline: none;
+  }
+  #backLink {
+    margin-top: 1rem;
+    color: #dc143c;
+    font-family: monospace;
+    text-decoration: underline;
+    cursor: pointer;
+    user-select: none;
+  }
+</style>
+</head>
+<body>
+<header>Rumah Jeritan - Game 9: Misteri Kabut Mematikan</header>
+<main>
+  <div id="gameText"></div>
+  <div id="inputArea">
+    <input type="text" id="choiceInput" placeholder="Masukkan pilihan (1-5)" maxlength="1" autofocus />
+    <button id="submitBtn" aria-label="Kirim Pilihan">Pilih</button>
+  </div>
+  <div id="backLink" tabindex="0" role="link" aria-label="Kembali ke halaman utama">← Kembali ke Halaman Utama</div>
+</main>
+
+<script>
+  const gameData = {
+    intro: `Kamu berjalan di tengah kabut tebal yang mematikan.
+Ada lima pilihan arah:
+1. Jalan ke hutan gelap.
+2. Jalan ke danau beracun.
+3. Jalan ke desa tertutup kabut.
+4. Jalan ke gua dalam.
+5. Jalan yang menurun ke jurang.
+Pilih 1-5 untuk melanjutkan.`,
+    story: [
+      `Kau memilih hutan gelap.
+Suara binatang aneh dan ranting patah mengiringi langkahmu.
+Pilihan:
+1. Ke dalam hutan lebih dalam.
+2. Memanjat pohon untuk melihat sekitar.
+3. Berteriak mencari pertolongan.
+4. Bersembunyi di balik semak.
+5. Putar balik dan cari jalan lain.
+Masukkan pilihan 1-5.`,
+
+      `Kau memilih danau beracun.
+Airnya berwarna merah dan berbau busuk.
+Pilihan:
+1. Menyelam mencari jalan keluar.
+2. Berjalan melewati tepi danau.
+3. Kumpulkan barang di sekeliling danau.
+4. Periksa tanaman sekitar.
+5. Pergi menjauh secepatnya.
+Masukkan pilihan 1-5.`
+    ],
+    endings: {
+      "0-1": [
+        "Hutan menelanmu tanpa sisa.\nGAME OVER.",
+        "Bayangan aneh mengikuti dan akhirnya menyergap.\nGAME OVER.",
+        "Suara jeritan terakhir terngiang di telinga."
+      ],
+      "0-2": [
+        "Dari atas pohon kau lihat jalan yang lebih aman.\nKamu berhasil selamat.",
+        "Pohon rapuh runtuh, menyebabkan kamu terjatuh.\nGAME OVER.",
+        "Kau mengawasi bayang-bayang dan menghindar dari bahaya."
+      ],
+      "0-3": [
+        "Teriakanmu membangunkan roh pendendam.\nGAME OVER.",
+        "Tidak ada yang menjawab, hanya kegelapan yang membalas.",
+        "Kesunyian makin memekakkan otak."
+      ],
+      "0-4": [
+        "Sembunyi memberimu waktu untuk bernapas.",
+        "Bayangan ternyata menemukannya dan menyerang.\nGAME OVER.",
+        "Ketakutan mengurungmu dalam penjara batin."
+      ],
+      "0-5": [
+        "Keputusan bijak. Kau putar balik dan menemukan jalan lain.",
+        "Kesempatan untuk melanjutkan hidup.",
+        "Petualangan belum selesai, tetap hati-hati."
+      ],
+      "1-1": [
+        "Air beracun menyeretmu ke dasar lake.\nGAME OVER.",
+        "Racun membuatmu pingsan dan tak sadar.",
+        "Kamu berhasil melewati danau dengan luka ringan."
+      ],
+      "1-2": [
+        "Berjalan dekat air menimbulkan suara yang menarik makhluk.\nGAME OVER.",
+        "Keberuntungan membawamu ke tanah aman.",
+        "Hati-hati, bahaya masih mengintai."
+      ],
+      "1-3": [
+        "Kamu menemukan ramuan yang menyelamatkan hidupmu.",
+        "Benda ini memberimu kekuatan sementara.",
+        "Rahasia alam terungkap sebagian."
+      ],
+      "1-4": [
+        "Tanaman beracun begitu dekat, kamu hampir terkena.\nGAME OVER.",
+        "Dengan hati-hati kau menghindari bahaya.",
+        "Temuanmu membantu melawan kutukan."
+      ],
+      "1-5": [
+        "Kau langsung menjauh, menyelamatkan diri dari bahaya.",
+        "Dengan cepat kau melangkah jauh dari bahaya.",
+        "Kesempatan hidup masih terbuka lebar."
+      ]
+    }
+  };
+
+  const gameText = document.getElementById("gameText");
+  const choiceInput = document.getElementById("choiceInput");
+  const submitBtn = document.getElementById("submitBtn");
+  const backLink = document.getElementById("backLink");
+
+  let stage = -1;
+  let choices = [];
+
+  function display(text) {
+    gameText.innerHTML = text.replace(/\n/g, "<br>");
+    choiceInput.value = "";
+    choiceInput.focus();
+  }
+
+  function getRandomEnding(key) {
+    const endings = gameData.endings[key];
+    if (!endings) return "Petualangan selesai. Terima kasih sudah bermain Rumah Jeritan.";
+    const index = Math.floor(Math.random() * endings.length);
+    return endings[index];
+  }
+
+  function showStage() {
+    if (stage === -1) {
+      display(gameData.intro);
+    } else if (stage < gameData.story.length) {
+      display(gameData.story[stage]);
+    } else {
+      const key = (stage - 1) + "-" + choices[stage];
+      const endingText = getRandomEnding(key);
+      display(endingText);
+      submitBtn.textContent = "Main Lagi";
+      choiceInput.disabled = true;
+    }
+  }
+
+  function resetGame() {
+    stage = -1;
+    choices = [];
+    submitBtn.textContent = "Pilih";
+    choiceInput.disabled = false;
+    display(gameData.intro);
+  }
+
+  submitBtn.addEventListener("click", () => {
+    if (submitBtn.textContent === "Main Lagi") {
+      resetGame();
+      return;
+    }
+    const input = choiceInput.value.trim();
+    if (!["1","2","3","4","5"].includes(input)) {
+      alert("Masukkan angka 1 sampai 5!");
+      choiceInput.focus();
+      return;
+    }
+    choices.push(input);
+    stage++;
+    showStage();
+  });
+
+  choiceInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      submitBtn.click();
+    }
+  });
+
+  backLink.addEventListener("click", () => {
+    window.history.back();
+  });
+
+  backLink.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      window.history.back();
+    }
+  });
+
+  window.addEventListener("load", () => {
+    resetGame();
+  });
+</script>
+</body>
+</html>

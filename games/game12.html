@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>Rumah Jeritan - Game 12: Detak Jantung di Balik Kabut</title>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Special+Elite&display=swap" rel="stylesheet" />
+<style>
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+  body {
+    font-family: 'Special Elite', monospace, monospace;
+    background-color: #1a1a1a;
+    color: #e8e1dc;
+    min-height: 100vh;
+    padding: 1rem;
+    user-select: none;
+    background-image:
+      url('https://images.pexels.com/photos/459225/pexels-photo-459225.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+    background-blend-mode: multiply;
+    background-color: #1a0000;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    filter: contrast(120%) brightness(90%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  header {
+    font-family: 'Creepster', cursive;
+    font-size: 3rem;
+    letter-spacing: 0.15em;
+    color: #dc143c;
+    text-shadow: 0 0 20px #dc143c, 0 0 30px #8b0000;
+    margin-bottom: 1rem;
+    text-align: center;
+    user-select: none;
+  }
+  main {
+    background-color: #2b0a0a;
+    border: 3px solid #660000;
+    border-radius: 12px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 0 30px #8b0000, inset 0 0 30px #330000;
+    color: #f4dfdf;
+    line-height: 1.6;
+    font-size: 1.15rem;
+    position: relative;
+  }
+  #gameText {
+    min-height: 320px;
+    white-space: pre-wrap;
+    overflow-y: auto;
+    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 1rem;
+  }
+  #inputArea {
+    display: flex;
+    gap: 0.75rem;
+  }
+  #choiceInput {
+    flex-grow: 1;
+    font-family: monospace;
+    font-size: 1.1rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: none;
+  }
+  #submitBtn {
+    background-color: #a80000;
+    border: none;
+    color: #f8dfdf;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #dc143c;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+  }
+  #submitBtn:hover, #submitBtn:focus {
+    background-color: #ff1919;
+    box-shadow: 0 0 14px #ff0000, 0 0 30px #ff5555;
+    outline: none;
+  }
+  #backLink {
+    margin-top: 1rem;
+    color: #dc143c;
+    font-family: monospace;
+    text-decoration: underline;
+    cursor: pointer;
+    user-select: none;
+  }
+</style>
+</head>
+<body>
+<header>Rumah Jeritan - Game 12: Detak Jantung di Balik Kabut</header>
+<main>
+  <div id="gameText"></div>
+  <div id="inputArea">
+    <input type="text" id="choiceInput" placeholder="Masukkan pilihan (1-5)" maxlength="1" autofocus />
+    <button id="submitBtn" aria-label="Kirim Pilihan">Pilih</button>
+  </div>
+  <div id="backLink" tabindex="0" role="link" aria-label="Kembali ke halaman utama">← Kembali ke Halaman Utama</div>
+</main>
+
+<script>
+  const gameData = {
+    intro: `Di sebuah malam berkabut tebal, jantungmu berdegup kencang saat melangkah menyusuri jalan setapak penuh misteri.
+Di depanmu terbentang lima jalan yang menguji keberanian:
+1. Jalan berlumpur dengan bau busuk yang menusuk.
+2. Lorong gelap dengan suara langkah yang mendekat.
+3. Jalur hutan tua diselimuti suara bisikan.
+4. Jalan menuju danau yang tenang namun penuh rahasia.
+5. Tangga menuju reruntuhan tua yang terlupakan.
+Pilihlah (1-5) jalan yang akan kau lalui.`,
+    story: [
+      `Kamu memilih jalan berlumpur.
+Setiap langkah berat dan suara makhluk tak terlihat mengikuti.
+Pilihanmu:
+1. Teruskan meski takut.
+2. Hentikan langkah dan sembunyi.
+3. Teriak untuk mengusir bayangan.
+4. Cari alat pertahanan di tanah.
+5. Berbalik dan cari jalan lain.
+Masukkan pilihan (1-5).`,
+
+      `Lorong gelap menyambutmu dengan hawa dingin menusuk tulang.
+Ada suara langkah yang semakin mendekat.
+Pilihan:
+1. Siapkan diri untuk bertarung.
+2. Lari dengan berlari secepat mungkin.
+3. Tersembunyi di balik bayangan.
+4. Panggil roh pelindung.
+5. Diam dan berdoa.
+Masukkan pilihan (1-5).`
+    ],
+    endings: {
+      "0-1": [
+        "Lumpur menghisap kakimu seiring bayangan mencekik lehermu.\nGAME OVER.",
+        "Kegelapan muncul dan menelan seluruh harapanmu.",
+        "Detak jantungmu berhenti sebelum cahaya pagi menyapa."
+      ],
+      "0-2": [
+        "Kesunyian menyelimutimu, tapi itu perangkap terakhir.\nGAME OVER.",
+        "Kau tersembunyi di antara akar pohon berbisik, berharap terhindar.",
+        "Semangatmu diuji di lorong penuh misteri yang tak berujung."
+      ],
+      "0-3": [
+        "Teriakan membangkitkan makhluk yang merenggut nyawamu.\nGAME OVER.",
+        "Bisikan menjadi raungan mengerikan dalam gelap.",
+        "Kau ditangkap oleh bayangan hitam tanpa ampun."
+      ],
+      "0-4": [
+        "Alat pertahananmu rusak dan kau terjebak dalam kegelapan.",
+        "Keberuntungan datang saat topeng roh muncul membantumu.",
+        "Pertarungan hidup dan mati yang melelahkan berlangsung."
+      ],
+      "0-5": [
+        "Berbalik membuatmu tersesat di hutan yang gelap gulita.",
+        "Kapal bayangan sedang menunggu untuk membawamu pergi selamanya.",
+        "Harapan hilang bersama kabut makin tebal."
+      ],
+      "1-1": [
+        "Kau bertarung dengan makhluk tak terlihat namun kalah.\nGAME OVER.",
+        "Energi gelap sempurna menguasai malam,\nkau tak berdaya.",
+        "Penyesalan tak berguna saat dikuasai kegelapan."
+      ],
+      "1-2": [
+        "Larianmu sia-sia, perangkap mencekik dan menutup pintu hidupmu.",
+        "Kau jatuh ke jurang tanpa akhir.\nGAME OVER.",
+        "Gelap memenuhi pandangan dan menutup segalanya."
+      ],
+      "1-3": [
+        "Menyembunyikan diri dan ketenangan menjadi senjatamu.",
+        "Waktu hampir habis, bayangan semakin mendekat.",
+        "Kau selamat... untuk saat ini."
+      ],
+      "1-4": [
+        "Roh pelindung memberimu kekuatan menghadapi kegelapan.",
+        "Namun bayangan lain masih mengintai dalam kegelapan.",
+        "Pertarungan berlanjut dan jiwamu diuji."
+      ],
+      "1-5": [
+        "Diam dan berdoa tak cukup untuk menghadapi malam ini.",
+        "Namun, ada secercah harapan yang muncul dari keheningan.",
+        "Jangan menyerah, esok adalah kesempatan baru."
+      ]
+    }
+  };
+
+  const gameText = document.getElementById("gameText");
+  const choiceInput = document.getElementById("choiceInput");
+  const submitBtn = document.getElementById("submitBtn");
+  const backLink = document.getElementById("backLink");
+
+  let stage = -1;
+  let choices = [];
+
+  function display(text) {
+    gameText.innerHTML = text.replace(/\n/g, "<br>");
+    choiceInput.value = "";
+    choiceInput.focus();
+  }
+
+  function getRandomEnding(key) {
+    const endings = gameData.endings[key];
+    if (!endings) return "Petualangan selesai. Terima kasih sudah bermain Rumah Jeritan.";
+    const index = Math.floor(Math.random() * endings.length);
+    return endings[index];
+  }
+
+  function showStage() {
+    if (stage === -1) {
+      display(gameData.intro);
+    } else if (stage < gameData.story.length) {
+      display(gameData.story[stage]);
+    } else {
+      const key = (stage - 1) + "-" + choices[stage];
+      const endingText = getRandomEnding(key);
+      display(endingText);
+      submitBtn.textContent = "Main Lagi";
+      choiceInput.disabled = true;
+    }
+  }
+
+  function resetGame() {
+    stage = -1;
+    choices = [];
+    submitBtn.textContent = "Pilih";
+    choiceInput.disabled = false;
+    display(gameData.intro);
+  }
+
+  submitBtn.addEventListener("click", () => {
+    if (submitBtn.textContent === "Main Lagi") {
+      resetGame();
+      return;
+    }
+    const input = choiceInput.value.trim();
+    if (!["1","2","3","4","5"].includes(input)) {
+      alert("Masukkan angka 1 sampai 5!");
+      choiceInput.focus();
+      return;
+    }
+    choices.push(input);
+    stage++;
+    showStage();
+  });
+
+  choiceInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      submitBtn.click();
+    }
+  });
+
+  backLink.addEventListener("click", () => {
+    window.history.back();
+  });
+
+  backLink.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      window.history.back();
+    }
+  });
+
+  window.addEventListener("load", () => {
+    resetGame();
+  });
+</script>
+</body>
+</html>

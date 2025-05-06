@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>Rumah Jeritan - Game 13: Wajah Dalam Cermin Kegelapan</title>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Special+Elite&display=swap" rel="stylesheet" />
+<style>
+  * {margin:0; padding:0; box-sizing: border-box;}
+  body {
+    font-family: 'Special Elite', monospace, monospace;
+    background-color: #1a1a1a;
+    color: #e8e1dc;
+    min-height: 100vh;
+    padding: 1rem;
+    user-select: none;
+    background-image:
+      url('https://images.pexels.com/photos/360142/pexels-photo-360142.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+    background-blend-mode: multiply;
+    background-color: #1a0000;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    filter: contrast(120%) brightness(90%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  header {
+    font-family: 'Creepster', cursive;
+    font-size: 3rem;
+    letter-spacing: 0.15em;
+    color: #dc143c;
+    text-shadow: 0 0 20px #dc143c, 0 0 30px #8b0000;
+    margin-bottom: 1rem;
+    text-align: center;
+    user-select: none;
+  }
+  main {
+    background-color: #2b0a0a;
+    border: 3px solid #660000;
+    border-radius: 12px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 0 30px #8b0000, inset 0 0 30px #330000;
+    color: #f4dfdf;
+    line-height: 1.5;
+    font-size: 1.15rem;
+    position: relative;
+  }
+  #gameText {
+    min-height: 260px;
+    white-space: pre-wrap;
+    overflow-y: auto;
+    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 1rem;
+  }
+  #inputArea {
+    display: flex;
+    gap: 0.75rem;
+  }
+  #choiceInput {
+    flex-grow: 1;
+    font-family: monospace;
+    font-size: 1.1rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: none;
+  }
+  #submitBtn {
+    background-color: #a80000;
+    border: none;
+    color: #f8dfdf;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #dc143c;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+  }
+  #submitBtn:hover, #submitBtn:focus {
+    background-color: #ff1919;
+    box-shadow: 0 0 14px #ff0000, 0 0 30px #ff5555;
+    outline: none;
+  }
+  #backLink {
+    margin-top: 1rem;
+    color: #dc143c;
+    font-family: monospace;
+    text-decoration: underline;
+    cursor: pointer;
+    user-select: none;
+  }
+</style>
+</head>
+<body>
+<header>Rumah Jeritan - Game 13: Wajah Dalam Cermin Kegelapan</header>
+<main>
+  <div id="gameText"></div>
+  <div id="inputArea">
+    <input type="text" id="choiceInput" placeholder="Masukkan pilihan (1-5)" maxlength="1" autofocus />
+    <button id="submitBtn" aria-label="Kirim Pilihan">Pilih</button>
+  </div>
+  <div id="backLink" tabindex="0" role="link" aria-label="Kembali ke halaman utama">← Kembali ke Halaman Utama</div>
+</main>
+
+<script>
+  const gameData = {
+    intro: `Kamu berdiri di depan cermin gelap berdebu di sebuah kamar tua.
+Lima bayangan muncul di balik cermin, memanggilmu dengan suara menggema:
+1. Dekati bayangan pertama yang tersenyum dingin.
+2. Perhatikan bayangan kedua yang menangis darah.
+3. Sentuh bayangan ketiga yang membeku.
+4. Lari menjauh dari bayangan keempat yang mengerikan.
+5. Menyapa bayangan kelima yang sunyi misterius.
+Pilih angka 1 sampai 5.`,
+    story: [
+      `Bayangan yang kau dekati tersenyum semakin lebar.
+Pilihanmu:
+1. Ikuti bayangan ke lorong tersembunyi.
+2. Berbalik dan menjerit.
+3. Coba berkomunikasi.
+4. Melihat lebih dekat ke mata bayangan.
+5. Tutup mata dan berharap ini mimpi.
+Masukkan pilihan 1-5.`,
+
+      `Bayangan kedua menangis darah, udara menjadi pekat.
+Pilihan:
+1. Mandikan diri dengan air suci yang kau bawa.
+2. Pingsan agar terlepas dari mimpi buruk.
+3. Peluk bayangan, mencoba memberi kenyamanan.
+4. Cabut dari kamar secepat mungkin.
+5. Lakukan ritual pengusiran roh.
+Masukkan pilihan 1-5.`
+    ],
+    endings: {
+      "0-1": [
+        "Kau tertelan lorong gelap yang tak berujung.\nKengerian abadi menanti.\nGAME OVER.",
+        "Bayangan membawamu ke dunia tanpa cahaya.\nJantungmu berhenti berdetak.",
+        "Tawa dingin bergema, mencekam hingga malam terakhir."
+      ],
+      "0-2": [
+        "Jeritanmu memecah keheningan, tapi tak ada yang datang.\nSendirian dalam kegelapan.",
+        "Kamu terjebak dalam mimpi yang tak bisa kau bangkitkan.",
+        "Bayangan bermain dengan pikirannmu, menghilangkan realita."
+      ],
+      "0-3": [
+        "Percakapan itu membuka rahasia kelam,\ntapi membuatmu hilang kendali.",
+        "Bayangan berubah menjadi nyata dan menghantui sepanjang hidupmu.",
+        "Kau menjadi bagian dari cermin itu selamanya."
+      ],
+      "0-4": [
+        "Matamu terpaku ke mata bayangan,\nkau hilang di cermin kegelapan.",
+        "Jiwamu tersesat dalam dunia bayangan tanpa kembali.",
+        "Detak jantungmu berhenti di tengah kengerian."
+      ],
+      "0-5": [
+        "Harapan dan realita bertabrakan,\ndan kau terbangun dengan napas berhenti.",
+        "Kamar sunyi menjadi penjara jiwa abadi.",
+        "Bisikan terakhir sebelum gelap menelan segalanya."
+      ],
+      "1-1": [
+        "Air suci membersihkan energi gelap,\nkau selamat malam ini.",
+        "Namun bayangan tetap mengintai di sudut mata.",
+        "Petualangan belum tentu berakhir."
+      ],
+      "1-2": [
+        "Pingsan membawa ketenangan sementara,\ntapi ancaman tetap ada.",
+        "Kau terjebak dalam siklus mimpi dan kenyataan.",
+        "Gelap dan terang silih berganti dalam kesadaranmu."
+      ],
+      "1-3": [
+        "Pelukanmu meredakan roh,\ntapi itu hanya sementara.",
+        "Roh menghilang, meninggalkan udara dingin.",
+        "Kau merasa damai sebelum kegelapan.
+      ",
+      "1-4": [
+        "Akan tetapi teror mengejarmu dan kau melarikan diri.",
+        "Lorong gelap menelan setiap langkahmu.",
+        "Suara-suara menggema di sepanjang perjalanan itu."
+      ],
+      "1-5": [
+        "Ritualmu mengusir roh dengan gemuruh petir dalam hati.",
+        "Kamu menguatkan langkah dan menghadapi malam.",
+        "Namun kegelapan menunggu di tikungan berikutnya."
+      ]
+    }
+  };
+
+  const gameText = document.getElementById("gameText");
+  const choiceInput = document.getElementById("choiceInput");
+  const submitBtn = document.getElementById("submitBtn");
+  const backLink = document.getElementById("backLink");
+
+  let stage = -1;
+  let choices = [];
+
+  function display(text) {
+    gameText.innerHTML = text.replace(/\n/g, "<br>");
+    choiceInput.value = "";
+    choiceInput.focus();
+  }
+
+  function getRandomEnding(key) {
+    const endings = gameData.endings[key];
+    if (!endings) return "Petualangan selesai. Terima kasih sudah bermain Rumah Jeritan.";
+    const index = Math.floor(Math.random() * endings.length);
+    return endings[index];
+  }
+
+  function showStage() {
+    if (stage === -1) {
+      display(gameData.intro);
+    } else if (stage < gameData.story.length) {
+      display(gameData.story[stage]);
+    } else {
+      const key = (stage - 1) + "-" + choices[stage];
+      const endingText = getRandomEnding(key);
+      display(endingText);
+      submitBtn.textContent = "Main Lagi";
+      choiceInput.disabled = true;
+    }
+  }
+
+  function resetGame() {
+    stage = -1;
+    choices = [];
+    submitBtn.textContent = "Pilih";
+    choiceInput.disabled = false;
+    display(gameData.intro);
+  }
+
+  submitBtn.addEventListener("click", () => {
+    if (submitBtn.textContent === "Main Lagi") {
+      resetGame();
+      return;
+    }
+    const input = choiceInput.value.trim();
+    if (!["1","2","3","4","5"].includes(input)) {
+      alert("Masukkan angka 1 sampai 5!");
+      choiceInput.focus();
+      return;
+    }
+    choices.push(input);
+    stage++;
+    showStage();
+  });
+
+  choiceInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      submitBtn.click();
+    }
+  });
+
+  backLink.addEventListener("click", () => {
+    window.history.back();
+  });
+
+  backLink.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      window.history.back();
+    }
+  });
+
+  window.addEventListener("load", () => {
+    resetGame();
+  });
+</script>
+</body>
+</html>
